@@ -1,9 +1,6 @@
 #!/usr/bin/env python3
-
-
-def main() -> None:
-    pass
+from src import routes
 
 
 if __name__ == '__main__':
-    main()
+    routes.main()
