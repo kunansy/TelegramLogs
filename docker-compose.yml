@@ -1,0 +1,15 @@
+version: '3'
+
+services:
+  telegram-logs:
+    build: .
+    ports:
+      - "127.0.0.1:8080:8080"
+    networks:
+      - bot-net
+    entrypoint: ["python3", "main.py"]
+    healthcheck:
+      test: "exit 0"
+
+networks:
+  bot-net:
