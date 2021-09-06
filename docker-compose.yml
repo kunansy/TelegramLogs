@@ -4,7 +4,7 @@ services:
   telegram-logs:
     build: .
     ports:
-      - "127.0.0.1:8080:8080"
+      - "127.0.0.1:{$TELEGRAM_BOT_PORT}:2025"
     networks:
       - bot-net
     entrypoint: ["python3", "main.py"]
