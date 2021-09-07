@@ -3,7 +3,7 @@ from functools import partial
 
 from aiogram import Bot, Dispatcher, types
 
-from src import settings
+from src import _log_record, settings
 
 
 loop = asyncio.get_event_loop()
@@ -15,7 +15,7 @@ allow_access = lambda msg: msg.from_user.username in settings.GRANTED_USERS
 message_handler = partial(dp.message_handler, allow_access)
 
 
-async def send_message(text: str) -> None:
+async def send_log_record(log_record: _log_record.LogRecord) -> None:
     await bot.send_message(
         settings.TELEGRAM_BOT_CHAT_ID, text)
 
