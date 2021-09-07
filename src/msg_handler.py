@@ -1,7 +1,9 @@
+from typing import Any
+
 from aiohttp import web
 from aiohttp.web import Request, Response, RouteTableDef
 
-from src import settings, bot_api
+from src import _log_record, bot_api, settings
 
 
 routes = RouteTableDef()
@@ -9,13 +11,26 @@ routes = RouteTableDef()
 
 @routes.post('/log')
 async def handle_log_msg(request: Request) -> Response:
+    """ The route handle log records with the structure:
+    {
+        "logger_name": str,
+        "logger_level": 'DEBUG', 'INFO' etc,
+        "record_date": string with iso format,
+        "where": str, where the exception occurred. Optional,
+        "message": what should be shown as a log data.
+    }
+    """
+    json_resp = await request.json()
     try:
-        log_record = await request.json()
-    except Exception as e:
-        print(e)
-        return Response(status=400)
+        log_record = _log_record.parse_response(json_resp)
+    except (KeyError, AssertionError, ValueError) as e:
+        return Response(
+            status=400,
+            body=repr(e),
+            reason="Wrong JSON"
+        )
 
-    await bot_api.send_message(str(log_record))
+    await bot_api.send_log_record(log_record)
 
     return Response(text='Log record processed')
 
