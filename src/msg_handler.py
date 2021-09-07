@@ -35,21 +35,25 @@ async def handle_log_msg(request: Request) -> Response:
     return Response(text='Log record processed')
 
 
+@web.middleware
 async def error_middleware(request: Request,
-                           handler: Any):
+                           handler: Callable):
     try:
         if (response := await handler(request)).status == 200:
             return response
 
         status = response.status
         msg = f"{response.text}; {response.reason}; {response.body}"
+    except (KeyError, AssertionError, ValueError) as e:
+        logger.error(repr(e))
+        msg, status = repr(e), 400
     except Exception as e:
+        logger.error(repr(e))
         msg, status = repr(e), 500
 
-    return web.json_response({
-        'error': msg,
-        'status': status
-    })
+    if status != 500:
+        raise HTTPBadRequest(reason=msg)
+    raise HTTPInternalServerError(reason=msg)
 
 
 app = web.Application(middlewares=[error_middleware])
