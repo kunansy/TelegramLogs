@@ -1,11 +1,12 @@
+from json import JSONDecodeError
 from typing import Callable
 
-from aiohttp import web
+from aiohttp import web, web_exceptions as wex
 from aiohttp.web import Request, Response, RouteTableDef
-from aiohttp.web_exceptions import HTTPBadRequest, HTTPInternalServerError
 
-from src import _log_record, bot_api, settings
+from src import _log_record, bot_api, exceptions, settings
 from src.log import logger
+
 
 routes = RouteTableDef()
 
@@ -24,8 +25,8 @@ async def handle_log_msg(request: Request) -> Response:
     json_resp = await request.json()
     try:
         log_record = _log_record.parse_response(json_resp)
-    except (KeyError, AssertionError, ValueError) as e:
-        raise ValueError(f"Invalid json: {e!r}")
+    except exceptions.InvalidJSONFormat as e:
+        raise wex.HTTPBadRequest(reason=repr(e))
 
     await bot_api.send_log_record(log_record)
 
@@ -41,16 +42,16 @@ async def error_middleware(request: Request,
 
         status = response.status
         msg = f"{response.text}; {response.reason}; {response.body}"
-    except (KeyError, AssertionError, ValueError) as e:
+    except (wex.HTTPException, JSONDecodeError) as e:
         logger.error(repr(e))
-        msg, status = repr(e), 400
+        raise wex.HTTPBadRequest(reason=repr(e))
     except Exception as e:
         logger.error(repr(e))
         msg, status = repr(e), 500
 
     if status != 500:
-        raise HTTPBadRequest(reason=msg)
-    raise HTTPInternalServerError(reason=msg)
+        raise wex.HTTPBadRequest(reason=msg)
+    raise wex.HTTPInternalServerError(reason=msg)
 
 
 app = web.Application(middlewares=[error_middleware])
