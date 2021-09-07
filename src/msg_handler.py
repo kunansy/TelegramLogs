@@ -1,10 +1,11 @@
-from typing import Any
+from typing import Callable
 
 from aiohttp import web
 from aiohttp.web import Request, Response, RouteTableDef
+from aiohttp.web_exceptions import HTTPBadRequest, HTTPInternalServerError
 
 from src import _log_record, bot_api, settings
-
+from src.log import logger
 
 routes = RouteTableDef()
 
@@ -24,11 +25,7 @@ async def handle_log_msg(request: Request) -> Response:
     try:
         log_record = _log_record.parse_response(json_resp)
     except (KeyError, AssertionError, ValueError) as e:
-        return Response(
-            status=400,
-            body=repr(e),
-            reason="Wrong JSON"
-        )
+        raise ValueError(f"Invalid json: {e!r}")
 
     await bot_api.send_log_record(log_record)
 
