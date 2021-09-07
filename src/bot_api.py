@@ -17,7 +17,7 @@ def auth(func: Callable):
     @wraps(func)
     async def wrapped(msg: types.Message):
         if msg.from_user.username not in settings.GRANTED_USERS:
-            return await msg.reply("I don't fucking know who are you, man", reply=False)
+            return await msg.reply("I don't fucking know who are you, man")
         return await func(msg)
     return wrapped
 
@@ -31,8 +31,10 @@ async def send_log_record(log_record: _log_record.LogRecord) -> None:
 @dp.message_handler(commands=['start'])
 @auth
 async def welcome(msg: types.Message) -> None:
-    await msg.reply(f"Hi there!\nI'm logs handler bot!\n"
-                    f"Developed by @{settings.DEVELOPER_USERNAME}")
+    await msg.reply(
+        "Hi there!\nI'm logs handler bot!\n"
+        f"Developed by [him]({settings.DEVELOPER_USERNAME})",
+        parse_mode="markdown", disable_web_page_preview=True)
 
 
 @dp.message_handler()
