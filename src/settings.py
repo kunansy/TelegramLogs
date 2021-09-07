@@ -1,3 +1,5 @@
+import os
+
 from environs import Env
 
 
@@ -16,3 +18,5 @@ with env.prefixed('TELEGRAM_BOT_'):
 
 LOG_MSG_HANDLER_HOST = '127.0.0.1'
 LOG_MSG_HANDLER_PORT = 2025
+
+os.environ.clear()
