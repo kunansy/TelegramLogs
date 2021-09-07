@@ -9,6 +9,10 @@ LOGGER_LEVELS = (
 )
 
 
+def _format_date(date: datetime.datetime) -> str:
+    return date.strftime("%d.%m.%Y %H:%M:%S.%f")
+
+
 @dataclass
 class LogRecord:
     logger_name: str
@@ -16,6 +20,17 @@ class LogRecord:
     record_date: datetime.datetime
     where: Optional[str]
     message: str
+
+    def format(self) -> str:
+        is_where = bool(self.where)
+
+        return f"{self.logger_name}: *{self.logger_level}*\n\n" \
+               f"When: {_format_date(self.record_date)}\n" \
+               f"{'Where: ' * is_where}{self.where or ''}\n" \
+               f"What: _{self.message}_"
+
+    def __str__(self) -> str:
+        return self.format()
 
 
 def parse_response(response: dict[str, Any]) -> LogRecord:
