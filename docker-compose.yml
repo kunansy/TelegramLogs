@@ -3,13 +3,9 @@ version: '3'
 services:
   telegram-logs:
     build: .
+    network_mode: "host"
     ports:
       - "127.0.0.1:$TELEGRAM_BOT_PORT:2025"
-    networks:
-      - bot-net
     entrypoint: ["python3", "main.py"]
     healthcheck:
       test: "exit 0"
-
-networks:
-  bot-net:
