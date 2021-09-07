@@ -20,7 +20,24 @@ async def handle_log_msg(request: Request) -> Response:
     return Response(text='Log record processed')
 
 
-app = web.Application()
+async def error_middleware(request: Request,
+                           handler: Any):
+    try:
+        if (response := await handler(request)).status == 200:
+            return response
+
+        status = response.status
+        msg = f"{response.text}; {response.reason}; {response.body}"
+    except Exception as e:
+        msg, status = repr(e), 500
+
+    return web.json_response({
+        'error': msg,
+        'status': status
+    })
+
+
+app = web.Application(middlewares=[error_middleware])
 app.add_routes(routes)
 
 
