@@ -23,8 +23,9 @@ def auth(func: Callable):
 
 
 async def send_log_record(log_record: _log_record.LogRecord) -> None:
-    await bot.send_message(
-        settings.TELEGRAM_BOT_CHAT_ID, text)
+    chat, msg = settings.TELEGRAM_BOT_CHAT_ID, str(log_record)
+    await bot.send_message(chat, msg, parse_mode="markdown",
+                           disable_web_page_preview=True)
 
 
 @dp.message_handler(commands=['start'])
