@@ -2,11 +2,7 @@ import datetime
 from dataclasses import dataclass
 from typing import Any, Optional
 
-
-LOGGER_LEVELS = (
-    'NOTSET', 'DEBUG', 'INFO',
-    'WARNING', 'ERROR', 'CRITICAL'
-)
+from src import exceptions
 
 
 def _format_date(date: datetime.datetime) -> str:
@@ -33,14 +29,20 @@ class LogRecord:
         return self.format()
 
 
-def parse_response(response: dict[str, Any]) -> LogRecord:
-    logger_level = response['logger_level']
-    assert logger_level.upper() in LOGGER_LEVELS, "Invalid logger_level"
+def _parse_response(response: dict[str, Any]) -> LogRecord:
+    logger_level = str(response['logger_level']).upper()
 
     return LogRecord(
         logger_name=str(response['logger_name']),
-        logger_level=logger_level.upper(),
+        logger_level=logger_level,
         record_date=datetime.datetime.fromisoformat(response['record_date']),
         where=response.get('where'),
         message=response['message']
     )
+
+
+def parse_response(response: dict[str, Any]) -> LogRecord:
+    try:
+        return _parse_response(response)
+    except (KeyError, ValueError) as e:
+        raise exceptions.InvalidJSONFormat(e)
