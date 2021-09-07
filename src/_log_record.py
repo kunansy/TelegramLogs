@@ -2,11 +2,11 @@ import datetime
 from dataclasses import dataclass
 from typing import Any, Optional
 
-from src import exceptions
+from src import exceptions, settings
 
 
 def _format_date(date: datetime.datetime) -> str:
-    return date.strftime("%d.%m.%Y %H:%M:%S.%f")
+    return date.strftime(settings.DATE_FORMAT)
 
 
 @dataclass
@@ -30,11 +30,9 @@ class LogRecord:
 
 
 def _parse_response(response: dict[str, Any]) -> LogRecord:
-    logger_level = str(response['logger_level']).upper()
-
     return LogRecord(
         logger_name=str(response['logger_name']),
-        logger_level=logger_level,
+        logger_level=str(response['logger_level']).upper(),
         record_date=datetime.datetime.fromisoformat(response['record_date']),
         where=response.get('where'),
         message=response['message']

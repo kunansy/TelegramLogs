@@ -9,7 +9,10 @@ env.read_env('.env')
 # username of people who can access the bot
 GRANTED_USERS = env.list('GRANTED_USERS', [])
 DEVELOPER_USERNAME = env('DEVELOPER_USERNAME')
+
 LOGGER_LEVEL = env.log_level('LOGGER_LEVEL', 'DEBUG')
+
+DATE_FORMAT = "%d.%m.%Y %H:%M:%S.%f"
 
 with env.prefixed('TELEGRAM_BOT_'):
     TELEGRAM_BOT_TOKEN = env('TOKEN')

@@ -1,5 +1,4 @@
 #!/usr/bin/env python3
-
 from aiogram import executor
 
 from src import msg_handler

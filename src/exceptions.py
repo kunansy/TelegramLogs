@@ -4,4 +4,3 @@ class BaseBotException(Exception):
 
 class InvalidJSONFormat(BaseBotException): 
     pass
-
