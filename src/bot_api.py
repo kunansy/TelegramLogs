@@ -23,9 +23,11 @@ def auth(func: Callable):
 
 
 async def send_log_record(log_record: _log_record.LogRecord) -> None:
-    chat, msg = settings.TELEGRAM_BOT_CHAT_ID, str(log_record)
-    await bot.send_message(chat, msg, parse_mode="markdown",
-                           disable_web_page_preview=True)
+    for chat_id in settings.TELEGRAM_BOT_CHAT_IDS:
+        await bot.send_message(
+            chat_id, log_record.format(),
+            parse_mode="markdown", disable_web_page_preview=True
+        )
 
 
 @dp.message_handler(commands=['start'])
@@ -37,7 +39,7 @@ async def welcome(msg: types.Message) -> None:
         parse_mode="markdown", disable_web_page_preview=True)
 
 
-@dp.message_handler()
+@dp.message_handler(commands=['echo'])
 @auth
 async def echo(msg: types.Message) -> None:
     await msg.answer(msg.text)
