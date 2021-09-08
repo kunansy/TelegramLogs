@@ -59,3 +59,7 @@ networks:
   mainservice_net:
     external: true
 ```
+
+## Credits
+1. [GitHub](https://github.com/kunansy/TelegramLogs)
+2. [DockerHub](https://hub.docker.com/r/kunansy/telegram_logs)
