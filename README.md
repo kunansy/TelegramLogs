@@ -5,6 +5,10 @@ Dump some critical logs from services to Telegram bot
 To start use the bot handler one should create bot in TG with [@BotFather](https://t.me/BotFather),
 create special method via which log messages would be sent to the bot and run the service with bot.
 
+## Telegram bot command
+1. `/start` or `/info` – get welcome message, developer URL, chat and user ids.
+2. `/echo bla-bla-bla` – test the bot is alive. If yes it will repeat the message you sent.
+
 ## Logger method
 Your logger should have method like:
 ```python3
