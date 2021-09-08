@@ -33,10 +33,10 @@ async def send_log_record(log_record: _log_record.LogRecord) -> None:
         except bex.BotBlocked:
             logger.error("Bot blocked")
         except bex.ChatNotFound:
-            logger.error("Char not found")
+            logger.error("Chat not found")
         except bex.RetryAfter as e:
-            logger.error(f"Target [ID:{chat_id}]: Flood limit is exceeded. "
-                        f"Sleep {e.timeout} seconds.")
+            logger.error(f"Target [{chat_id}]: Flood limit is exceeded. "
+                         f"Sleep {e.timeout} seconds.")
             await asyncio.sleep(e.timeout)
             return await send_log_record(log_record)
         except bex.UserDeactivated:
