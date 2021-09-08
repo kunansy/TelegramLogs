@@ -51,8 +51,9 @@ async def send_log_record(log_record: _log_record.LogRecord) -> None:
 @auth
 async def welcome(msg: types.Message) -> None:
     await msg.reply(
-        "Hi there!\nI'm logs handler bot!\n"
-        f"Developed by [him]({settings.DEVELOPER_USERNAME})",
+        "Hi there! I'm logs handler bot!\n"
+        f"Developed by [him]({settings.DEVELOPER_USERNAME})\n\n"
+        f"Id of the chat is {msg.chat.id}",
         parse_mode="markdown", disable_web_page_preview=True)
 
 
