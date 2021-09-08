@@ -17,9 +17,9 @@ DATE_FORMAT = "%d.%m.%Y %H:%M:%S.%f"
 with env.prefixed('TELEGRAM_BOT_'):
     TELEGRAM_BOT_TOKEN = env('TOKEN')
     # TODO: ContextVar or db or another thing
-    TELEGRAM_BOT_CHAT_ID = env.int('CHAT_ID')
+    TELEGRAM_BOT_CHAT_IDS = env.list('CHAT_ID')
 
-LOG_MSG_HANDLER_HOST = '127.0.0.1'
+LOG_MSG_HANDLER_HOST = '0.0.0.0'
 LOG_MSG_HANDLER_PORT = 2025
 
 os.environ.clear()
