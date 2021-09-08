@@ -47,13 +47,14 @@ async def send_log_record(log_record: _log_record.LogRecord) -> None:
             logger.info(f"Target [ID:{chat_id}]: success")
 
 
-@dp.message_handler(commands=['start'])
+@dp.message_handler(commands=['start', 'info'])
 @auth
 async def welcome(msg: types.Message) -> None:
     await msg.reply(
-        "Hi there! I'm logs handler bot!\n"
-        f"Developed by [him]({settings.DEVELOPER_USERNAME})\n\n"
-        f"Id of the chat is {msg.chat.id}",
+        "Hi there! I'm logs handler bot!\n\n"
+        f"Developer: [URL]({settings.DEVELOPER_USERNAME})\n"
+        f"chat_id: {msg.chat.id}\n"
+        f"user_id: {msg.from_user.id}",
         parse_mode="markdown", disable_web_page_preview=True)
 
 
