@@ -9,6 +9,8 @@ create special method via which log messages would be sent to the bot and run th
 Your logger should have method like:
 ```python3
 import logging
+import json
+
 import aiohttp
 
 
@@ -25,11 +27,14 @@ class Logger(logging.Logger):
             "where": f"{msg.module}: {msg.funcName}, {msg.lineno} line",
             "message": msg.message
         }
+        data = json.dumps(log_record)
         
         timeout = aiohttp.ClientTimeout(20)
         async with aiohttp.ClientSession(timeout=timeout) as ses:
-            async with ses.post(BOT_HANDLER_URL, data=log_record) as resp:
-                resp.raise_for_status()
+            try:
+                await ses.post(BOT_HANDLER_URL, data=data)
+            except Exception as e:
+                self.log(30, f"TG bot doesn't work: {e}")
         
         self.log(msg.levelno, msg.message)
 ```
