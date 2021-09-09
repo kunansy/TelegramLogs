@@ -10,7 +10,8 @@ from src.log import logger
 
 loop = asyncio.get_event_loop()
 
-bot = Bot(token=settings.TELEGRAM_BOT_TOKEN)
+bot = Bot(token=settings.TELEGRAM_BOT_TOKEN,
+          parse_mode="markdown")
 dp = Dispatcher(bot, loop=loop)
 
 
@@ -46,7 +47,7 @@ async def send_log_record(log_record: _log_record.LogRecord) -> None:
         try:
             await bot.send_message(
                 chat_id, log_record.format(),
-                parse_mode="markdown", disable_web_page_preview=True
+                disable_web_page_preview=True
             )
         except bex.BotBlocked:
             logger.error("Bot blocked")
@@ -71,9 +72,8 @@ async def welcome(msg: types.Message) -> None:
     await msg.reply(
         "Hi there! I'm logs handler bot!\n\n"
         f"Developer: [URL]({settings.DEVELOPER_USERNAME})\n"
-        f"chat_id: {msg.chat.id}\n"
-        f"user_id: {msg.from_user.id}",
-        parse_mode="markdown", disable_web_page_preview=True)
+        f"chat\_id: {msg.chat.id}\n",
+        disable_web_page_preview=True)
 
 
 @dp.message_handler(commands=['echo'])
