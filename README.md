@@ -6,11 +6,11 @@ To start use the bot handler one should create bot in TG with [@BotFather](https
 create special method via which log messages would be sent to the bot and run the service with bot.
 
 ## Telegram bot command
-1. `/start` or `/info` – get welcome message, developer URL, chat and user ids.
+1. `/start` or `/info` – get welcome message, developer URL and chat id.
 2. `/echo bla-bla-bla` – test the bot is alive. If yes it will repeat the message you sent.
 
 ## Logger method
-Your logger should have method like:
+Your logger should have a method like:
 ```python3
 import datetime
 import json
@@ -18,7 +18,7 @@ import logging
 
 import aiohttp
 
-# host must be the same as the name if the bot container
+# host must be the same as the name of the bot container
 BOT_HANDLER_URL = "http://telegram_logs:2025/logs"
 
 
@@ -53,9 +53,9 @@ services:
     image: kunansy/telegram_logs
     environment:
       - TELEGRAM_BOT_TOKEN=<your bot token>
-      - TELEGRAM_BOT_CHAT_IDS=42 # id of chats to where the bot will send handled messages
-      - NOTIFY_ON_STARTUP=true # send to admins a message that the bot is started on startup
-      - ADMIN_IDS=[] # id of users who are admins of the bot
+      - TELEGRAM_BOT_CHAT_IDS=42,37 # id of chats to where the bot will send handled messages
+      - NOTIFY_ON_STARTUP=true # on startup send to admins a message that the bot is started
+      - ADMIN_IDS=1,27 # id of users who are admins of the bot
       - GRANTED_USERS=oh_its_my_chief,oh_its_me # which users might use the bot
       - DEVELOPER_USERNAME=https://github.com/kunansy # who created the bot
     entrypoint: ["python3", "main.py"]
@@ -66,6 +66,8 @@ services:
       - mainservice_net
 
 # Connect the logger to main network to process logs from there.
+# It needed only if the bot is outside the main docker-compose file, 
+#  otherwise just add the service to the common network.
 networks:
   mainservice_net:
     external: true
