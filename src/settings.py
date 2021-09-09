@@ -7,7 +7,9 @@ env = Env()
 
 # username of people who can access the bot
 GRANTED_USERS = env.list('GRANTED_USERS', [])
-DEVELOPER_USERNAME = env('DEVELOPER_USERNAME')
+ADMIN_IDS = env.list('ADMIN_ID', [])
+DEVELOPER_USERNAME = env('DEVELOPER_USERNAME', "https://github.com/kunansy")
+NOTIFY_ON_STARTUP = env.bool('NOTIFY_ON_STARTUP', True)
 
 LOGGER_LEVEL = env.log_level('LOGGER_LEVEL', 'DEBUG')
 
