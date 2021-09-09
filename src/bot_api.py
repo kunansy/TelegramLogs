@@ -35,6 +35,8 @@ def auth(func: Callable):
     async def wrapped(msg: types.Message):
         if msg.from_user.username not in settings.GRANTED_USERS:
             return await msg.reply("I don't fucking know who are you, man")
+        if msg.from_user.is_bot is True:
+            return await msg.reply("You are a bot, I will not work with you")
         return await func(msg)
     return wrapped
 
