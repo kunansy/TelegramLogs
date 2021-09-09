@@ -15,6 +15,30 @@ bot = Bot(token=settings.TELEGRAM_BOT_TOKEN,
 dp = Dispatcher(bot, loop=loop)
 
 
+async def send_msg(chat_id: int,
+                   msg: str) -> None:
+    try:
+        await bot.send_message(
+            chat_id, msg,
+            disable_web_page_preview=True
+        )
+    except bex.BotBlocked:
+        logger.error("Bot blocked")
+    except bex.ChatNotFound:
+        logger.error("Chat not found")
+    except bex.RetryAfter as e:
+        logger.error(f"Target [{chat_id}]: Flood limit is exceeded. "
+                     f"Sleep {e.timeout} seconds.")
+        await asyncio.sleep(e.timeout)
+        return await send_msg(chat_id, msg)
+    except bex.UserDeactivated:
+        logger.error(f"Target [ID:{chat_id}]: user is deactivated")
+    except bex.TelegramAPIError:
+        logger.exception(f"Target [ID:{chat_id}]: failed")
+    else:
+        logger.info(f"Target [ID:{chat_id}]: success")
+
+
 async def set_default_commands() -> None:
     await bot.set_my_commands([
         types.BotCommand("start", "Start the bot and get info"),
@@ -28,7 +52,7 @@ async def notify_startup() -> None:
         return
 
     for admin_id in settings.ADMIN_IDS:
-        await bot.send_message(admin_id, "Bot started")
+        await send_msg(admin_id, "Bot started")
 
 
 def auth(func: Callable):
@@ -44,26 +68,7 @@ def auth(func: Callable):
 
 async def send_log_record(log_record: _log_record.LogRecord) -> None:
     for chat_id in settings.TELEGRAM_BOT_CHAT_IDS:
-        try:
-            await bot.send_message(
-                chat_id, log_record.format(),
-                disable_web_page_preview=True
-            )
-        except bex.BotBlocked:
-            logger.error("Bot blocked")
-        except bex.ChatNotFound:
-            logger.error("Chat not found")
-        except bex.RetryAfter as e:
-            logger.error(f"Target [{chat_id}]: Flood limit is exceeded. "
-                         f"Sleep {e.timeout} seconds.")
-            await asyncio.sleep(e.timeout)
-            return await send_log_record(log_record)
-        except bex.UserDeactivated:
-            logger.error(f"Target [ID:{chat_id}]: user is deactivated")
-        except bex.TelegramAPIError:
-            logger.exception(f"Target [ID:{chat_id}]: failed")
-        else:
-            logger.info(f"Target [ID:{chat_id}]: success")
+        await send_msg(chat_id, log_record.format())
 
 
 @dp.message_handler(commands=['start', 'info'])
