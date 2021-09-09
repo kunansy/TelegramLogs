@@ -14,6 +14,22 @@ bot = Bot(token=settings.TELEGRAM_BOT_TOKEN)
 dp = Dispatcher(bot, loop=loop)
 
 
+async def set_default_commands() -> None:
+    await bot.set_my_commands([
+        types.BotCommand("start", "Start the bot and get info"),
+        types.BotCommand("info", "Start the bot and get info"),
+        types.BotCommand("start", "Test the bot is alive. If yes it will repeat the message you sent."),
+    ])
+
+
+async def notify_startup() -> None:
+    if not settings.NOTIFY_ON_STARTUP:
+        return
+
+    for admin_id in settings.ADMIN_IDS:
+        await bot.send_message(admin_id, "Bot started")
+
+
 def auth(func: Callable):
     @wraps(func)
     async def wrapped(msg: types.Message):
