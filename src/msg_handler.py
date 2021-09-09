@@ -23,10 +23,7 @@ async def handle_log_msg(request: Request) -> Response:
     }
     """
     json_resp = await request.json()
-    try:
-        log_record = _log_record.parse_response(json_resp)
-    except exceptions.InvalidJSONFormat as e:
-        raise wex.HTTPBadRequest(reason=repr(e))
+    log_record = _log_record.parse_response(json_resp)
 
     await bot_api.send_log_record(log_record)
 
@@ -42,7 +39,8 @@ async def error_middleware(request: Request,
 
         status = response.status
         msg = f"{response.text}; {response.reason}; {response.body}"
-    except (wex.HTTPException, JSONDecodeError) as e:
+    except (wex.HTTPException, JSONDecodeError,
+            exceptions.InvalidJSONFormat) as e:
         logger.error(repr(e))
         raise wex.HTTPBadRequest(reason=repr(e))
     except Exception as e:

@@ -11,7 +11,7 @@ from src.log import logger
 loop = asyncio.get_event_loop()
 
 bot = Bot(token=settings.TELEGRAM_BOT_TOKEN,
-          parse_mode="markdown")
+          parse_mode="markdownv2")
 dp = Dispatcher(bot, loop=loop)
 
 
@@ -19,12 +19,12 @@ async def set_default_commands() -> None:
     await bot.set_my_commands([
         types.BotCommand("start", "Start the bot and get info"),
         types.BotCommand("info", "Start the bot and get info"),
-        types.BotCommand("start", "Test the bot is alive. If yes it will repeat the message you sent."),
+        types.BotCommand("echo", "Test the bot is alive. If yes it will repeat the message you sent."),
     ])
 
 
 async def notify_startup() -> None:
-    if not settings.NOTIFY_ON_STARTUP:
+    if settings.NOTIFY_ON_STARTUP is False:
         return
 
     for admin_id in settings.ADMIN_IDS:
@@ -70,7 +70,7 @@ async def send_log_record(log_record: _log_record.LogRecord) -> None:
 @auth
 async def welcome(msg: types.Message) -> None:
     await msg.reply(
-        "Hi there! I'm logs handler bot!\n\n"
+        "Hi there\! I'm logs handler bot\!\n\n"
         f"Developer: [URL]({settings.DEVELOPER_USERNAME})\n"
         f"chat\_id: {msg.chat.id}\n",
         disable_web_page_preview=True)
