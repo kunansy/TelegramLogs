@@ -78,7 +78,9 @@ async def welcome(msg: types.Message) -> None:
         "Hi there\! I'm logs handler bot\!\n\n"
         f"Developer: [URL]({settings.DEVELOPER_USERNAME})\n"
         f"chat\_id: {msg.chat.id}\n",
-        disable_web_page_preview=True)
+        disable_web_page_preview=True,
+        parse_mode=types.ParseMode.MARKDOWN_V2
+    )
 
 
 @dp.message_handler(commands=['healthcheck'])
