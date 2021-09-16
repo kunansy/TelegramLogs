@@ -23,20 +23,20 @@ async def send_msg(chat_id: int,
             disable_web_page_preview=True
         )
     except bex.BotBlocked:
-        logger.error("Bot blocked")
+        logger.error("[%s]: Bot blocked", chat_id)
     except bex.ChatNotFound:
-        logger.error("Chat not found")
+        logger.error("[%s]: Chat not found", chat_id)
     except bex.RetryAfter as e:
-        logger.error(f"Target [{chat_id}]: Flood limit is exceeded. "
-                     f"Sleep {e.timeout} seconds.")
+        logger.error("[%s]: Flood limit exceeded. Sleep %ss.",
+                     chat_id, e.timeout)
         await asyncio.sleep(e.timeout)
         return await send_msg(chat_id, msg)
     except bex.UserDeactivated:
-        logger.error(f"Target [ID:{chat_id}]: user is deactivated")
+        logger.error("[%s]: User deactivated", chat_id)
     except bex.TelegramAPIError:
-        logger.exception(f"Target [ID:{chat_id}]: failed")
+        logger.exception("[%s]: Failed", chat_id)
     else:
-        logger.info(f"Target [ID:{chat_id}]: success")
+        logger.info("[%s]: Success", chat_id)
 
 
 async def set_default_commands() -> None:
