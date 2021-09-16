@@ -7,7 +7,7 @@ create special method via which log messages would be sent to the bot and run th
 
 ## Telegram bot command
 1. `/start` or `/info` – get welcome message, developer URL and chat id.
-2. `/echo bla-bla-bla` – test the bot is alive. If yes it will repeat the message you sent.
+2. `/healthcheck` – test the bot is alive.
 
 ## Logger method
 Your logger should have a method like:

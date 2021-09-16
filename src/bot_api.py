@@ -8,6 +8,7 @@ from aiogram.utils import exceptions as bex
 from src import _log_record, settings
 from src.log import logger
 
+
 loop = asyncio.get_event_loop()
 
 bot = Bot(token=settings.TELEGRAM_BOT_TOKEN,
@@ -43,7 +44,7 @@ async def set_default_commands() -> None:
     await bot.set_my_commands([
         types.BotCommand("start", "Start the bot and get info"),
         types.BotCommand("info", "Start the bot and get info"),
-        types.BotCommand("echo", "Test the bot is alive. If yes it will repeat the message you sent."),
+        types.BotCommand("healthcheck", "Test the bot is alive"),
     ])
 
 
@@ -81,7 +82,7 @@ async def welcome(msg: types.Message) -> None:
         disable_web_page_preview=True)
 
 
-@dp.message_handler(commands=['echo'])
+@dp.message_handler(commands=['healthcheck'])
 @auth
 async def echo(msg: types.Message) -> None:
-    await msg.answer(msg.text)
+    await msg.reply("I'm alive")
