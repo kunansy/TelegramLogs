@@ -20,10 +20,10 @@ class LogRecord:
     def format(self) -> str:
         is_where = bool(self.where)
 
-        return f"{self.logger_name}: *{self.logger_level}*\n\n" \
+        return f"{self.logger_name}: {self.logger_level}\n\n" \
                f"When: {_format_date(self.record_date)}\n" \
                f"{'Where: ' * is_where}{self.where or ''}\n" \
-               f"What: _{self.message}_"
+               f"What: {self.message}"
 
     def __str__(self) -> str:
         return self.format()
