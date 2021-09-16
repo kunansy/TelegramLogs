@@ -11,8 +11,7 @@ from src.log import logger
 
 loop = asyncio.get_event_loop()
 
-bot = Bot(token=settings.TELEGRAM_BOT_TOKEN,
-          parse_mode="markdownv2")
+bot = Bot(token=settings.TELEGRAM_BOT_TOKEN)
 dp = Dispatcher(bot, loop=loop)
 
 
