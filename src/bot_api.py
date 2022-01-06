@@ -75,9 +75,9 @@ async def send_log_record(log_record: _log_record.LogRecord) -> None:
 @auth
 async def welcome(msg: types.Message) -> None:
     await msg.reply(
-        "Hi there\! I'm logs handler bot\!\n\n"
+        "Hi there\! I'm logs handler bot\!\n\n" # noqa
         f"Developer: [URL]({settings.DEVELOPER_USERNAME})\n"
-        f"chat\_id: {msg.chat.id}\n",
+        f"chat\_id: {msg.chat.id}\n", # noqa
         disable_web_page_preview=True,
         parse_mode=types.ParseMode.MARKDOWN_V2
     )

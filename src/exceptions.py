@@ -2,5 +2,5 @@ class BaseBotException(Exception):
     pass
 
 
-class InvalidJSONFormat(BaseBotException): 
+class InvalidJSONFormat(BaseBotException):
     pass
