@@ -1,4 +1,4 @@
-FROM python:3.9-slim-buster as telegram-logs
+FROM python:3.10-slim-buster as telegram-logs
 
 ENV PYTHONUNBUFFERED 1
 
