@@ -1,4 +1,9 @@
 # TelegramLogs
+![Tests status](https://github.com/kunansy/TelegramLogs/actions/workflows/python-app.yml/badge.svg)
+![Build Status](https://github.com/kunansy/TelegramLogs/actions/workflows/docker-image.yml/badge.svg)
+![Stable Version](https://img.shields.io/github/v/tag/kunansy/TelegramLogs)
+![Latest Release](https://img.shields.io/github/v/release/kunansy/TelegramLogs?color=%233D9970)
+
 Dump some critical logs from services to Telegram bot
 
 ## Intro
