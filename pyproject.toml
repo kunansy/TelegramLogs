@@ -6,13 +6,13 @@ authors = ["kunansy <kolobov.kirill@list.ru>"]
 license = "MIT"
 
 [tool.poetry.dependencies]
-python = "^3.9"
-aiogram = "~2.14.3"
-environs = "~9.3.3"
+python = "^3.10"
+aiogram = "~2.18"
+environs = "~9.4.0"
 uvloop = "~0.16.0"
-ujson = "~4.1.0"
+ujson = "~5.1.0"
 cchardet = "~2.1.7"
-aiohttp = {version = "~3.7.4.post0", extras = ["speedups"]}
+aiohttp = "~3.8.1"
 
 [tool.poetry.dev-dependencies]
 
