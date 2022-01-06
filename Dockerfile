@@ -4,6 +4,7 @@ ENV PYTHONUNBUFFERED 1
 
 RUN apt-get update \
     && apt-get upgrade -y \
+    && apt-get install g++ -y \
     && pip install poetry --no-cache-dir \
     && rm -rf /var/lib/apt/lists/*
 
