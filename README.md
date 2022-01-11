@@ -24,7 +24,7 @@ import logging
 import aiohttp
 
 # host must be the same as the name of the bot container
-BOT_HANDLER_URL = "http://telegram_logs:2025/logs"
+BOT_HANDLER_URL = "http://telegram_logs:2025/log"
 
 
 class Logger(logging.Logger):
